@@ -13,5 +13,7 @@ function checkMiddleware(request, response, next) {
 const usersController = new UsersController();
 
 usersRoutes.post("/", checkMiddleware, usersController.create)
+usersRoutes.put("/:id", checkMiddleware, usersController.update)
+
 
 module.exports = usersRoutes;
