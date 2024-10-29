@@ -1,17 +1,15 @@
 const { Router } = require("express");
-
-
-function checkMiddleware(request, response, next) {
-  console.log();
-  next();
-}
+const TagsController = require("");
 
 const tagsRoutes = Router();
 
-tagsRoutes.post("/", (request, response) => {
-  const { name } = request.body;
+function checkMiddleware(request, response, next) {
+  console.log("checado")
+  next();
+}
 
-  response.json({ name });
-});
+const tagsController = new TagsController();
+
+tagsRoutes.get("/:user_id", checkMiddleware, tagsController.index);
 
 module.exports = tagsRoutes;
