@@ -11,6 +11,9 @@ function checkMiddleware(request, response, next) {
 
 const movieNotesController = new MovieNotesController()
 
-movieNotesRoutes.post("/", checkMiddleware, movieNotesController.create);
+movieNotesRoutes.get("/", checkMiddleware, movieNotesController.index);
+movieNotesRoutes.post("/:user_id", checkMiddleware, movieNotesController.create);
+movieNotesRoutes.get("/:id", checkMiddleware, movieNotesController.show);
+movieNotesRoutes.delete("/:id", checkMiddleware, movieNotesController.delete);
 
 module.exports = movieNotesRoutes;

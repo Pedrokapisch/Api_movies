@@ -1,6 +1,8 @@
+const { request, response } = require("express");
+const sqliteConnection = require("../database/sqlite");
+const knex = require("../database/knex");
 const { hash, compare } = require("bcrypt");
 const AppError = require("../utils/AppError");
-const sqliteConnection = require("../database/sqlite");
 
 class UsersController {
   async create(request, response) {
@@ -15,7 +17,7 @@ class UsersController {
 
     if(!name) {
       throw new AppError("Nome é obrigatório.")
-    }
+    };
 
     const hashedPassword = await hash(password, 8);
 
@@ -23,7 +25,7 @@ class UsersController {
       "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",[ name, email, hashedPassword]
     );
 
-    response.status(201).json("usuário criado");
+    response.status(201).json("conferir database");
   };
 
   async update(request, response) {
@@ -34,19 +36,19 @@ class UsersController {
     const user = await database.get("SELECT * FROM users WHERE id = (?)", [id]);
 
     if(!user) {
-      throw new AppError("Usuário não encontrado");
+      throw new AppError("Usuário não encontrado")
     };
 
     const checkUserEmail = await database.get("SELECT * FROM users WHERE email = (?)", [email]);
     if(checkUserEmail && checkUserEmail.id !== user.id) {
-      throw new AppError("Este email já esta em uso");
+      throw new AppError("Este email já esta em uso")
     };
 
     user.name = name ?? user.name;
     user.email = email ?? user.email;
 
     if( password && !old_password ) {
-      throw new AppError("Informe a senha antiga.");
+      throw new AppError("Informe a senha antiga.")
     };
 
     if(password && old_password) {
@@ -70,6 +72,14 @@ class UsersController {
     );
     
     return response.json("conferir database");
+  };
+
+  async delete(request, response) {
+    const { id } = request.params;
+
+    await knex("users").where({ id }).delete();
+
+    return response.json();
   };
 };
 

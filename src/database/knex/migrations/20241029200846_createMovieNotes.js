@@ -1,7 +1,6 @@
-
 exports.up = knex => knex.schema.createTable("movie_notes", table => {
   table.increments("id");
-  table.text("title");
+  table.text("title").notNullable();
   table.text("description");
   table.integer("rating").notNullable().checkBetween([1, 5]);
   table.integer("user_id").references("id").inTable("users");
